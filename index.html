@@ -97,9 +97,7 @@
             document.body.appendChild(heart);
 
             // Реакція на натискання
-            heart.addEventListener("touchstart", () => handleHeartPop(heart));
-            heart.addEventListener("click", () => handleHeartPop(heart));
-
+            heart.addEventListener("touchend", () => handleHeartPop(heart));
             setTimeout(() => heart.remove(), 6000);
         }
 
@@ -129,3 +127,4 @@
 
 </body>
 </html>
+
