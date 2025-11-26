@@ -15,11 +15,6 @@
             margin: 0;
         }
 
-        h1 {
-            font-size: 28px;
-            color: #d6336c;
-        }
-
         #days {
             font-size: 18vw; 
             font-weight: bold;
@@ -36,6 +31,7 @@
             animation: floatUp 6s linear infinite;
             opacity: 0.9;
             user-select: none;
+            touch-action: none;
         }
 
         @keyframes floatUp {
@@ -62,7 +58,6 @@
             100% { opacity: 0; transform: scale(1); }
         }
 
-        /* Відключення синього виділення на мобільному */
         * {
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -76,8 +71,10 @@
     <div id="days">...</div>
 
     <script>
+        // Дата
         const startDate = new Date("2024-10-11");
 
+        // Автооновлення днів
         function updateDays() {
             const today = new Date();
             const diff = today - startDate;
@@ -86,21 +83,23 @@
         }
         updateDays();
 
-        // ❤️ Генератор сердечок
+        // ❤️ Генератор сердець
         function createHeart() {
             const heart = document.createElement("div");
             heart.classList.add("heart");
             heart.textContent = "❤️";
 
-            heart.style.left = Math.random() * 90 + "vw"; 
+            heart.style.left = Math.random() * 90 + "vw";
 
             document.body.appendChild(heart);
 
-            // Реакція на натискання
-            heart.addEventListener("touchend", () => handleHeartPop(heart));
+            // ГОЛОВНИЙ FIX — працює на телефонах і ПК
+            heart.addEventListener("pointerdown", () => handleHeartPop(heart));
+
             setTimeout(() => heart.remove(), 6000);
         }
 
+        // ❤️ Реакція на натискання
         function handleHeartPop(heart) {
             heart.style.animation = "none";
             heart.style.transition = "opacity 0.25s, transform 0.25s";
@@ -118,7 +117,7 @@
 
             document.body.appendChild(text);
 
-            setTimeout(() => text.remove(), 2000);
+            setTimeout(() => text.remove(), 1800);
             setTimeout(() => heart.remove(), 250);
         }
 
@@ -127,4 +126,3 @@
 
 </body>
 </html>
-
