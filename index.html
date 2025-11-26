@@ -39,20 +39,23 @@ body {
     100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
 }
 
-/* ❤️ Текст Love Qivenna по центру */
+/* Маленький текст над сердечком */
 .love-text {
     position: absolute;
     color: #ff0077;
-    font-size: 8vw;
+    font-size: 4vw;
     font-weight: bold;
-    text-shadow: 0 0 20px #ff99bb;
+    text-shadow: 0 0 10px #ff99bb;
     opacity: 0;
     pointer-events: none;
-    animation: loveFade 1.8s ease-out forwards;
+    animation: loveFade 1.5s ease-out forwards;
     user-select: none;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+}
+
+@keyframes loveFade {
+    0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+    40% { opacity: 1; transform: translateY(-5px) scale(1); }
+    100% { opacity: 0; transform: translateY(-15px) scale(1); }
 }
 
 /* Ефект конфеті */
@@ -69,12 +72,6 @@ body {
 @keyframes confettiFall {
     0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
     100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; }
-}
-
-@keyframes loveFade {
-    0% { opacity: 0; transform: scale(0.5); }
-    40% { opacity: 1; transform: scale(1.15); }
-    100% { opacity: 0; transform: scale(1); }
 }
 
 * {
@@ -127,12 +124,15 @@ function handleHeartPop(heart) {
     sound.currentTime = 0;
     sound.play();
 
-    // Текст по центру
+    // Маленький текст над сердечком
+    const rect = heart.getBoundingClientRect();
     const text = document.createElement("div");
     text.classList.add("love-text");
     text.textContent = "Love Qivenna";
+    text.style.left = rect.left + "px";
+    text.style.top = rect.top - 20 + "px"; // трохи над сердечком
     document.body.appendChild(text);
-    setTimeout(() => text.remove(), 1800);
+    setTimeout(() => text.remove(), 1500);
 
     // 🎆 Конфеті
     for (let i=0; i<8; i++){
