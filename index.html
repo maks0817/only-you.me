@@ -41,7 +41,6 @@ body {
 
 /* Маленький текст над сердечком */
 .love-text {
-    position: absolute;
     color: #ff0077;
     font-size: 4vw;
     font-weight: bold;
@@ -124,14 +123,17 @@ function handleHeartPop(heart) {
     sound.currentTime = 0;
     sound.play();
 
-    // Маленький текст над сердечком
+    // Маленький текст над сердечком (fixed для iPhone)
     const rect = heart.getBoundingClientRect();
     const text = document.createElement("div");
     text.classList.add("love-text");
     text.textContent = "Love Qivenna";
+    text.style.position = "fixed";
     text.style.left = rect.left + "px";
-    text.style.top = rect.top - 20 + "px"; // трохи над сердечком
-    document.body.appendChild(text);
+    text.style.top = (rect.top - 20) + "px";
+
+    // Додаємо з невеликою затримкою для iPhone
+    setTimeout(() => document.body.appendChild(text), 10);
     setTimeout(() => text.remove(), 1500);
 
     // 🎆 Конфеті
