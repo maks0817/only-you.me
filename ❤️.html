@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- мобільна адаптація -->
+    <title>❤️</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background: #ffffff; 
+            text-align: center;
+            padding-top: 80px;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #d6336c;
+            margin-bottom: 15px;
+        }
+
+        #days {
+            font-size: 18vw; /* адаптивний розмір для телефона */
+            font-weight: bold;
+            color: #ff0055;
+            text-shadow: 0 0 20px #ff99bb;
+            line-height: 1;
+        }
+
+        /* ❤️ Анімовані сердечка */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            color: #ff4d88;
+            font-size: 8vw;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.8);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1></h1>
+    <div id="days">...</div>
+
+    <script>
+        const startDate = new Date("2024-10-11");
+
+        function updateDays() {
+            const today = new Date();
+            const diff = today - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("days").textContent = days;
+        }
+        updateDays();
+
+        // ❤️ Генератор сердечок
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.textContent = "❤️";
+
+            heart.style.left = Math.random() * window.innerWidth + "px";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        setInterval(createHeart, 400);
+    </script>
+
+</body>
+</html>
