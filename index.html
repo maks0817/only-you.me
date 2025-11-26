@@ -1,130 +1,163 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❤️</title>
 
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background: #ffffff; 
-            text-align: center;
-            padding-top: 80px;
-            overflow: hidden;
-            margin: 0;
-        }
+<style>
+body {
+    font-family: "Arial", sans-serif;
+    background: #ffffff;
+    text-align: center;
+    padding-top: 80px;
+    overflow: hidden;
+    margin: 0;
+}
 
-        #days {
-            font-size: 18vw; 
-            font-weight: bold;
-            color: #ff0055;
-            text-shadow: 0 0 20px #ff99bb;
-        }
+#days {
+    font-size: 18vw; 
+    font-weight: bold;
+    color: #ff0055;
+    text-shadow: 0 0 20px #ff99bb;
+}
 
-        /* ❤️ Анімовані сердечка */
-        .heart {
-            position: absolute;
-            bottom: -10vh;
-            color: #ff4d88;
-            font-size: 10vw;
-            animation: floatUp 6s linear infinite;
-            opacity: 0.9;
-            user-select: none;
-            touch-action: none;
-        }
+/* ❤️ Сердечка */
+.heart {
+    position: absolute;
+    bottom: -10vh;
+    color: #ff4d88;
+    font-size: 10vw;
+    animation: floatUp 6s linear infinite;
+    opacity: 0.9;
+    user-select: none;
+    touch-action: none;
+}
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
-        }
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
+}
 
-        /* ❤️ Текст Love Qivenna */
-        .love-text {
-            position: absolute;
-            color: #ff0077;
-            font-size: 7vw;
-            font-weight: bold;
-            text-shadow: 0 0 12px #ff99bb;
-            opacity: 0;
-            pointer-events: none;
-            animation: loveFade 1.8s ease-out forwards;
-            user-select: none;
-        }
+/* ❤️ Текст Love Qivenna по центру */
+.love-text {
+    position: absolute;
+    color: #ff0077;
+    font-size: 8vw;
+    font-weight: bold;
+    text-shadow: 0 0 20px #ff99bb;
+    opacity: 0;
+    pointer-events: none;
+    animation: loveFade 1.8s ease-out forwards;
+    user-select: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
 
-        @keyframes loveFade {
-            0% { opacity: 0; transform: scale(0.5); }
-            40% { opacity: 1; transform: scale(1.15); }
-            100% { opacity: 0; transform: scale(1); }
-        }
+/* Ефект конфеті */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #ff4d88;
+    border-radius: 50%;
+    opacity: 1;
+    pointer-events: none;
+}
 
-        * {
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-    </style>
+@keyframes confettiFall {
+    0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; }
+}
+
+@keyframes loveFade {
+    0% { opacity: 0; transform: scale(0.5); }
+    40% { opacity: 1; transform: scale(1.15); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+* {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+</style>
 </head>
 
 <body>
 
-    <h1></h1>
-    <div id="days">...</div>
+<div id="days">...</div>
 
-    <script>
-        // Дата
-        const startDate = new Date("2024-10-11");
+<audio id="popSound" src="https://assets.codepen.io/3/pop.mp3" preload="auto"></audio>
 
-        // Автооновлення днів
-        function updateDays() {
-            const today = new Date();
-            const diff = today - startDate;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById("days").textContent = days;
-        }
-        updateDays();
+<script>
+// Дні
+const startDate = new Date("2024-10-11");
+function updateDays() {
+    const today = new Date();
+    const diff = today - startDate;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("days").textContent = days;
+}
+updateDays();
 
-        // ❤️ Генератор сердець
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.textContent = "❤️";
+// ❤️ Генератор сердечок
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.textContent = "❤️";
 
-            heart.style.left = Math.random() * 90 + "vw";
+    heart.style.left = Math.random() * 90 + "vw";
+    document.body.appendChild(heart);
 
-            document.body.appendChild(heart);
+    heart.addEventListener("pointerdown", () => handleHeartPop(heart));
 
-            // ГОЛОВНИЙ FIX — працює на телефонах і ПК
-            heart.addEventListener("pointerdown", () => handleHeartPop(heart));
+    setTimeout(() => heart.remove(), 6000);
+}
 
-            setTimeout(() => heart.remove(), 6000);
-        }
+// ❤️ Натискання
+function handleHeartPop(heart) {
+    heart.style.animation = "none";
+    heart.style.transition = "opacity 0.25s, transform 0.25s";
+    heart.style.opacity = "0";
+    heart.style.transform = "scale(0.4)";
 
-        // ❤️ Реакція на натискання
-        function handleHeartPop(heart) {
-            heart.style.animation = "none";
-            heart.style.transition = "opacity 0.25s, transform 0.25s";
-            heart.style.opacity = "0";
-            heart.style.transform = "scale(0.4)";
+    // 🎵 Звук
+    const sound = document.getElementById("popSound");
+    sound.currentTime = 0;
+    sound.play();
 
-            const rect = heart.getBoundingClientRect();
+    // Текст по центру
+    const text = document.createElement("div");
+    text.classList.add("love-text");
+    text.textContent = "Love Qivenna";
+    document.body.appendChild(text);
+    setTimeout(() => text.remove(), 1800);
 
-            const text = document.createElement("div");
-            text.classList.add("love-text");
-            text.textContent = "Love Qivenna";
+    // 🎆 Конфеті
+    for (let i=0; i<8; i++){
+        const conf = document.createElement("div");
+        conf.classList.add("confetti");
+        document.body.appendChild(conf);
+        conf.style.left = heart.offsetLeft + "px";
+        conf.style.top = heart.offsetTop + "px";
+        const x = (Math.random()-0.5)*200 + "px";
+        const y = (-Math.random()*200 - 50) + "px";
+        conf.style.setProperty("--x", x);
+        conf.style.setProperty("--y", y);
+        conf.style.animation = `confettiFall 1s forwards`;
+        setTimeout(()=>conf.remove(), 1000);
+    }
 
-            text.style.left = rect.left + "px";
-            text.style.top = rect.top + "px";
+    setTimeout(() => heart.remove(), 250);
+}
 
-            document.body.appendChild(text);
-
-            setTimeout(() => text.remove(), 1800);
-            setTimeout(() => heart.remove(), 250);
-        }
-
-        setInterval(createHeart, 450);
-    </script>
+setInterval(createHeart, 450);
+</script>
 
 </body>
 </html>
+
+
 
 
